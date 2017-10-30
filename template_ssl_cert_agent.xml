@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>3.0</version>
+    <date>2017-10-29T23:56:56Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template SSL Cert - agent</template>
+            <name>Template SSL Cert - agent</name>
+            <description>Discovery and monitor ssl certificates from Zabbix agent via a userparameter.</description>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>SSL Certificates</name>
+                </application>
+            </applications>
+            <items>
+                <item>
+                    <name>Run SSL certificate checks</name>
+                    <type>0</type>
+                    <snmp_community/>
+                    <multiplier>0</multiplier>
+                    <snmp_oid/>
+                    <key>ssl_cert.run_checks[&quot;{HOST.NAME}&quot;,443,10]</key>
+                    <delay>3600</delay>
+                    <history>90</history>
+                    <trends>0</trends>
+                    <status>0</status>
+                    <value_type>4</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <delta>0</delta>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <formula>1</formula>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <data_type>0</data_type>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description>Arguments:&#13;
+1) hostname to run ssl checks against&#13;
+2) port (default: 443)&#13;
+3) timeout in seconds</description>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>SSL Certificates</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>SSL Certificate Discovery</name>
+                    <type>2</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>ssl_cert.discovery</key>
+                    <delay>0</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <delay_flex/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions/>
+                    </filter>
+                    <lifetime>30</lifetime>
+                    <description>The following macros are available for prototypes and filters:&#13;
+Country: &quot;{#SSL_C}&#13;
+Common name: {#SSL_CN}&#13;
+Locality: {#SSL_L}&#13;
+Organization: {#SSL_O}&#13;
+Department: {#SSL_OU}&#13;
+State: {#SSL_ST}</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Days until SSL cert expiry for CN &quot;{#SSL_CN}&quot;</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>ssl_cert.days_remaining[&quot;{#SSL_CN}&quot;]</key>
+                            <delay>0</delay>
+                            <history>90</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Numeric (float) so that we can pass negative values after the cert expires</description>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>SSL Certificates</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <application_prototypes/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SSL cert notAfter date for CN &quot;{#SSL_CN}&quot;</name>
+                            <type>2</type>
+                            <snmp_community/>
+                            <multiplier>0</multiplier>
+                            <snmp_oid/>
+                            <key>ssl_cert.notafter[&quot;{#SSL_CN}&quot;]</key>
+                            <delay>0</delay>
+                            <history>90</history>
+                            <trends>365</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>unixtime</units>
+                            <delta>0</delta>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <formula>1</formula>
+                            <delay_flex/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <data_type>0</data_type>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>SSL Certificates</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <application_prototypes/>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template SSL Cert - agent:ssl_cert.days_remaining[&quot;{#SSL_CN}&quot;].last()}&lt;=7</expression>
+                            <name>SSL cert for CN &quot;{#SSL_CN}&quot; will expire in less than 7 days</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>5</priority>
+                            <description/>
+                            <type>0</type>
+                            <dependencies/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL Cert - agent:ssl_cert.days_remaining[&quot;{#SSL_CN}&quot;].last()}&lt;=14</expression>
+                            <name>SSL cert for CN &quot;{#SSL_CN}&quot; will expire in less than 14 days</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                            <dependencies>
+                                <dependency>
+                                    <name>SSL cert for CN &quot;{#SSL_CN}&quot; will expire in less than 7 days</name>
+                                    <expression>{Template SSL Cert - agent:ssl_cert.days_remaining[&quot;{#SSL_CN}&quot;].last()}&lt;=7</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL Cert - agent:ssl_cert.days_remaining[&quot;{#SSL_CN}&quot;].last()}&lt;=30</expression>
+                            <name>SSL cert for CN &quot;{#SSL_CN}&quot; will expire in less than 30 days</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                            <dependencies>
+                                <dependency>
+                                    <name>SSL cert for CN &quot;{#SSL_CN}&quot; will expire in less than 14 days</name>
+                                    <expression>{Template SSL Cert - agent:ssl_cert.days_remaining[&quot;{#SSL_CN}&quot;].last()}&lt;=14</expression>
+                                </dependency>
+                            </dependencies>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                </discovery_rule>
+            </discovery_rules>
+            <macros/>
+            <templates/>
+            <screens/>
+        </template>
+    </templates>
+</zabbix_export>

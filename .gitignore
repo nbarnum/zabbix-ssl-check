@@ -1,0 +1,3 @@
+/test/.vagrant
+/test/*.log
+/zabbix_agentd.d/userparameter_mysql.*

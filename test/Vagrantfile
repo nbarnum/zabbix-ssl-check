@@ -1,0 +1,47 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
+  config.vm.box = 'ubuntu/xenial64'
+
+  config.vm.synced_folder '../scripts/', '/etc/zabbix/scripts/'
+  config.vm.synced_folder '../scripts/', '/usr/lib/zabbix/externalscripts/'
+  config.vm.synced_folder '../zabbix_agentd.d/', '/etc/zabbix/zabbix_agentd.d/'
+
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+
+  config.vm.provider :virtualbox do |vb|
+    vb.memory = '1024'
+  end
+
+  config.vm.provision :shell, inline: <<-SHELL
+    set -e
+    export DEBIAN_FRONTEND=noninteractive
+
+    echo -e "\n--- setting up Zabbix repo ---\n"
+    wget -q http://repo.zabbix.com/zabbix/3.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_3.0-1+xenial_all.deb
+    dpkg -i zabbix-release_3.0-1+xenial_all.deb >/dev/null 2>&1
+    apt-get -qq update
+
+    echo -e "\n--- installing Zabbix ---\n"
+    apt-get -qq -y install zabbix-server-mysql zabbix-frontend-php zabbix-agent zabbix-sender zabbix-get php7.0-bcmath php7.0-mbstring php-sabre-xml python >/dev/null 2>&1
+
+    echo -e "\n--- preparing Zabbix DB ---\n"
+    mysql -u root -e 'create database zabbix character set utf8 collate utf8_bin;'
+    mysql -u root -e "grant all privileges on zabbix.* to zabbix@localhost identified by 'zabbix';"
+    zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -uzabbix -pzabbix zabbix
+    echo "DBPassword=zabbix" >> /etc/zabbix/zabbix_server.conf
+
+    echo -e "\n--- fixing the Zabbix frontend ---\n"
+    sed -i.orig 's:# php_value date.timezone Europe/Riga:php_value date.timezone UTC:g' /etc/zabbix/apache.conf
+    cp /vagrant/zabbix.conf.php /etc/zabbix/web/zabbix.conf.php
+    service apache2 reload >/dev/null 2>&1
+
+    service zabbix-server start
+    service zabbix-agent start
+
+    echo -e "\n--- done ---\n"
+    echo -e "\nhttp://localhost:8080/zabbix"
+    echo -e "\n\nLogin creds:\nu: Admin\np: zabbix"
+  SHELL
+end
