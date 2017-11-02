@@ -41,9 +41,9 @@ def extract_ssl_field(regex, subject):
 
 parser = argparse.ArgumentParser(description='Retrieve SSL certificate expiry for Zabbix checks')
 parser.add_argument(
-    '--hostname',
-    default=socket.getfqdn(),
-    help='The hostname to target in openssl (Default: FQDN)'
+    'hostname',
+    metavar='HOSTNAME',
+    help='Retrieve SSL certificates from this hostname'
 )
 parser.add_argument(
     '--port',
@@ -79,10 +79,12 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Retrive SSL certificates from hostname
+openssl_cmd = 'echo | openssl s_client -connect {0}:{1} -showcerts'.format(args.hostname, args.port)
+# if servername targeting is enabled, add to cmd
 if args.servername:
-    stdout, stderr = run_cmd('echo | openssl s_client -connect {0}:{1} -servername {2} -showcerts'.format(args.hostname, args.port, args.hostname), args.timeout)
-else:
-    stdout, stderr = run_cmd('echo | openssl s_client -connect {0}:{1} -showcerts'.format(args.hostname, args.port), args.timeout)
+    openssl_cmd += ' -servername {0}'.format(args.hostname)
+
+stdout, stderr = run_cmd(openssl_cmd, args.timeout)
 
 # Find all x509 certificates and extract them
 x509_certs = re.findall('(-----BEGIN CERTIFICATE-----\n.*?-----END CERTIFICATE-----\n)', stdout, re.DOTALL)

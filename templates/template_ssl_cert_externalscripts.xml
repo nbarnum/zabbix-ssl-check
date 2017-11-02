@@ -29,7 +29,7 @@
                     <snmp_community/>
                     <multiplier>0</multiplier>
                     <snmp_oid/>
-                    <key>ssl_cert.py[&quot;--hostname&quot;,&quot;{HOST.NAME}&quot;,&quot;--port&quot;,&quot;443&quot;,&quot;--timeout&quot;,&quot;10&quot;]</key>
+                    <key>ssl_cert.py[&quot;--port&quot;,&quot;443&quot;,&quot;--timeout&quot;,&quot;10&quot;,&quot;{HOST.NAME}&quot;]</key>
                     <delay>3600</delay>
                     <history>90</history>
                     <trends>0</trends>

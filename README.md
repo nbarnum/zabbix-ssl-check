@@ -8,9 +8,9 @@ Templates were built against Zabbix 3.0.
 
 ## Check types
 
-Two Zabbix templates are included in `templates/` for two different approaches:
+Two Zabbix templates are included in `templates/` for two different approaches: `externalscripts` or `agent` (Zabbix agent). Both cases expect Python and Zabbix sender to be installed.
 
-### `externalscripts`
+### externalscripts
 
 Zabbix server or Zabbix proxy runs the checks via pollers.
 
@@ -32,7 +32,7 @@ Zabbix server or Zabbix proxy runs the checks via pollers.
 
     By default the template passes the `{HOST.NAME}` macro into the script. This will be the target of the SSL certificate discovery and monitoring.
 
-### `agent`
+### agent
 
 Zabbix agent runs the checks.
 
@@ -66,7 +66,7 @@ _NOTE: Zabbix agent can run checks against `localhost` and/or remote hosts_
 - In cases where one IP/server serves many hostnames (i.e. using nginx for SSL termination of multiple hostnames), only the default SSL Certificate will be returned. The script `ssl_cert.py` can target by servername if the `Run SSL certificate checks` in the `externalscripts` version is updated:
 
     ```
-    ssl_cert.py["--hostname","{HOST.NAME}","--port","443","--timeout","10","--servername"]
+    ssl_cert.py["--port","443","--timeout","10","--servername","{HOST.NAME}"]
     ```
 
     This still requires individually adding each host in Zabbix, however.
