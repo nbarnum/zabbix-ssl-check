@@ -40,16 +40,49 @@ def extract_ssl_field(regex, subject):
 
 
 parser = argparse.ArgumentParser(description='Retrieve SSL certificate expiry for Zabbix checks')
-parser.add_argument('--hostname', default=socket.getfqdn())
-parser.add_argument('--port', default='443')
-parser.add_argument('--dryrun', action='store_true')
-parser.add_argument('--timeout', type=int, default=15)
-parser.add_argument('--zabbix-config', default='/etc/zabbix/zabbix_agentd.conf')
-parser.add_argument('--zabbix-sender', default='zabbix_sender')
+parser.add_argument(
+    '--hostname',
+    default=socket.getfqdn(),
+    help='The hostname to target in openssl (Default: FQDN)'
+)
+parser.add_argument(
+    '--port',
+    default='443',
+    help='The port to target in openssl (Default: 443)'
+)
+parser.add_argument(
+    '--dryrun',
+    action='store_true',
+    help='Dryrun does not attempt to send metrics to Zabbix (Default: false)'
+)
+parser.add_argument(
+    '--timeout',
+    type=int,
+    default=15,
+    help='Time in seconds before sending a timeout to openssl (Default: 15)'
+)
+parser.add_argument(
+    '--zabbix-config',
+    default='/etc/zabbix/zabbix_agentd.conf',
+    help='Path to the Zabbix agent configuration file. Passed to the zabbix_sender command. (Default: /etc/zabbix/zabbix_agentd.conf)'
+)
+parser.add_argument(
+    '--zabbix-sender',
+    default='zabbix_sender',
+    help='Path to the zabbix_sender binary. (Default: zabbix_sender)'
+)
+parser.add_argument(
+    '--servername',
+    action='store_true',
+    help='Whether to target the servername in the openssl command or not. Useful for cases such as nginx where multiple multiple hostnames are served by 1 IP address and must be individually targeted. (Default: false)'
+)
 args = parser.parse_args()
 
 # Retrive SSL certificates from hostname
-stdout, stderr = run_cmd('echo | openssl s_client -connect {0}:{1} -showcerts'.format(args.hostname, args.port), args.timeout)
+if args.servername:
+    stdout, stderr = run_cmd('echo | openssl s_client -connect {0}:{1} -servername {2} -showcerts'.format(args.hostname, args.port, args.hostname), args.timeout)
+else:
+    stdout, stderr = run_cmd('echo | openssl s_client -connect {0}:{1} -showcerts'.format(args.hostname, args.port), args.timeout)
 
 # Find all x509 certificates and extract them
 x509_certs = re.findall('(-----BEGIN CERTIFICATE-----\n.*?-----END CERTIFICATE-----\n)', stdout, re.DOTALL)
